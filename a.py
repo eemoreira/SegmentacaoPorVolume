@@ -3,6 +3,15 @@ import pickle
 import sys
 import matplotlib.pyplot as plt
 
+directions = [
+    (1, 0, 0), (-1, 0, 0),  # faces no eixo x
+    (0, 1, 0), (0, -1, 0),  # faces no eixo y
+    (0, 0, 1), (0, 0, -1),  # faces no eixo z
+    (1, 1, 0), (1, -1, 0), (-1, 1, 0), (-1, -1, 0),  # arestas xy
+    (1, 0, 1), (1, 0, -1), (-1, 0, 1), (-1, 0, -1),  # arestas xz
+    (0, 1, 1), (0, 1, -1), (0, -1, 1), (0, -1, -1)   # arestas yz
+]
+
 sys.setrecursionlimit(1000000)
 
 with open('volume_TAC', 'rb') as f:
@@ -24,15 +33,7 @@ def GetGroups(lookfor):
         cnt = 1
         vis[i][j][k] = True
         component.append((i, j, k))
-        for ii in range(-1, 2):
-            for jj in range(-1, 2):
-                for kk in range(-1, 2):
-                    if (ii != 0 and jj != 0):
-                        continue
-                    if (ii != 0 and kk != 0):
-                        continue
-                    if (jj != 0 and kk != 0):
-                        continue
+        for ii, jj, kk in directions:
                     nxt_i = i + ii
                     nxt_j = j + jj
                     nxt_k = k + kk
@@ -65,7 +66,7 @@ def show(group, name):
     ax.voxels(mask, facecolors='red', edgecolor='k')
 
     ax.set_title(f'Visualização 3D do Maior Agrupamento de Células {name}')
-    plt.savefig(f'maior_agrupamento_{name}.png', format='png', dpi=300)
+    plt.savefig(f'maior_agrupamento_{name}_18conectividade.png', format='png', dpi=300)
 
 
 PROLIFERATIVA = 255
